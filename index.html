@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>متابعة الطالب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F2;--card:#fff;--ink:#1F3A5F;--mute:#6B7A8F;--line:#E3DFD3;--pen:#F2B632;--pen-ink:#3A2B00;--bad:#C8402F;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14202F;--card:#1D2D42;--ink:#EAF0F8;--mute:#9AABC0;--line:#2E4260;--bad:#FF8F7E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14202F;--card:#1D2D42;--ink:#EAF0F8;--mute:#9AABC0;--line:#2E4260;--bad:#FF8F7E;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',Tahoma,Arial,sans-serif;font-size:16px;line-height:1.6;max-width:560px;margin-inline:auto;padding:0 14px 40px}
+h1{font-size:24px;font-weight:800;margin:16px 0 2px}
+h2{font-size:19px;margin:0 0 2px}
+h3{font-size:15px;margin:14px 0 4px;color:var(--mute)}
+.sub,.tag{color:var(--mute);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;min-width:0}
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;background:var(--pen);color:var(--pen-ink);cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.err{color:var(--bad);margin-top:8px;font-weight:600}
+.entry{display:flex;justify-content:space-between;gap:8px;border-top:1px dashed var(--line);padding:6px 0;font-size:15px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--pen)}
+.stats{display:flex;gap:8px;margin-top:10px}
+.stat{flex:1;text-align:center;border:1px solid var(--line);border-radius:12px;padding:8px 4px}
+.stat b{display:block;font-size:20px}
+.sq{display:inline-flex;gap:3px;direction:ltr}.sq i{width:16px;height:12px;border-radius:3px;background:var(--line)}.sq i.on{background:var(--pen)}
+label{display:block;font-size:14px;color:var(--mute);margin-bottom:6px}
+</style>
+</head>
+<body>
+<h1>متابعة الطالب</h1>
+<p class="sub" id="upd"></p>
+<main id="app"></main>
+<script>
+var D={"u":"21/11/2026","wa":"201091708702","b":[{"s":"/j/ZemA58vK549BevwNLeg==","i":"io6XNY6ntc69JmUY","c":"BZ5ScLpu69KWRUCrYWK47PzGBVwzyAvmyXsx3dVTrefqbSV3PlzY2XlUQ1XyFJ9nRbpcs28cqmx4uJl/O4O4/+H8vh5gRoIhDQcluzLOK1PEBi3GbXfBx3Bt1fcMuBaEOVUk6xoMdXHNJgsdyAkhZq8/GY0uQK7CWQto+2F0l34BRYUODfBmuxcSIvsQtP3wucfJOy7xAzi4XibvYjcXHd+jZ1y7eCKOmr56Pd4xgTI9vwlHPzemAixdxRV10Gcldr9Ox58WEOZRWI8QHnG2yasLpso/ghi+zSXJNpB1aVa4+VU/PGMGRqvzC85CZa2wVktxEIX8b73uv0cFvP3f9RI13Xx0cGKwuU9BuH8+4vuRaoGhO7wTXo3j6gM9U7of2Rx8OVKsmieW1VmXUhnbrxy55bhAzg31HuNPPxq+27POI0MgR8d0vooA6lqkxRAgpaHahopm88jSBAcPt51phjEVYhGY87/wnn55zdDMOJiAZU9kEKbgdeBoN3+ZztYFRxAljyRFMeefGXE/m0Uip9Ukg49d6i+k8730lmFv2/9ya/GzNS7OYnnWclLztuuNI1E="},{"s":"qXGRQp8CdnflXnyQ9A4syg==","i":"MmX5XZ0RcXYlSWkf","c":"sMcU8IQi3iw03D8NbLnPVtiIVfXRqyRgnE2PyGCoZQYZnxGupMnxfJ1uE3bv8fRhPLprC1fMuMNWl0BeQY7YFyWB93H50lu4Kne4Ca+P2TuULNbq6WdMIlMgYD3gfjTZHQJjovo4we9fbvWJ2NqZXPZQOm0H++DaTn0vL50whNTFv+W4bhSPLfI+kvD+yyosaLecRymWGSASFqfoklXIbLqpcRfbsyxycaoflnZdvcSw+lepUW/G/8qOLpO0Rn8HTQA/XwTSmwvcPjgzfS/Rp9HRwxc9JYVP9EipFHe4v0Q5c9HccdNGhCI1Pdpr/G01tGZttywSy2A7/Cxxv/mXpVX8i+eB5R6jR7r3UFgwVRVBc25/qtYZfWiRj7Lvk1IPo6LzBR9pEbIfu+MZekNJrTneCM9XRz2cVm5SXmFyp3Y+/XsWGCN8Vp4XWDR0flo3zwk5vQl7XrCCA+OnYMxWoGS4z3Q0RGTQNlDT4j67kemUJUuw2l1kq16SX+8yAkgJwXUy5gDlt2JLogjnfWYkI7dKVBxWX9EMLZh4fGWwN3muYb9tdrTP4U51mOGvIejKGp8wA0W/X1RrIleX7uWjcFJAgdFuaMiSeeW8m4GjrGT6S382hApLd6cw8ES8g6fkt0apqfUzJ4tKQMsIMZH3p9roy6pcub/1aQZAz6vdUr3DkmtJk7eVWn+SbSCxJaUClqUIfWoigx07L3wQH8M3kkZDNEBqStvMBpB49nlkk02DeC/LXf0nH31SwiQVJXJJ54nYP8Yy02s6PbNmmGC6MyLvtI/Uj4pWQIKutASAxFxp0ooaJCggqenRLWQCvxabDpMK3dfBYduweZ+nAXcAexmL5zue5GywwuE+QkURnhuL2ZqB7PI="},{"s":"JQkGTsL1BQnSBdIZH7w/PA==","i":"yurQ1BvopcL+EFE5","c":"nR5iQy2CxeTbaI/g9rwOZ3X+eHu0W3Aq0F7NAehIm/Rv5FgpsFoFfNMfO0V/eDwy2kfpB3hst5C36z7ad5tTuBYy2RFGzkb5cJPCH9Tqi5wJQan134zI57ZEl6RspEMlYFo12OiSrp312VDAtYEeew5evlsfNt9izVPRZ7pCPmYJMXigG4bKWtPx8QeiUoUGKnQ4bMx1LZNIqtkEeczhVAPDvhu2eBcQViRhL8RMWZ+DTkRQOKN4EpttuaJqWN90+vs3DDvEd1DjNvPya5i0OPGaFKwFXUnkLq9PAZvet9NserVKB2z3fVBAuWRf8K5b9Szx5RN9klFn0odlkygJ"},{"s":"Kcnv4lRWTm2DNzgH7Hyc+A==","i":"n11aL8RYVd9H3IrR","c":"ERLpX7dOcHZUdZuPAMHzmm2AmPX9hpvpEjvn4/QwJT8FAX0zJtI10Gp5Hc10OgySzJ2r8UOak+RP029+kjvbklNmFUYfv+WP3slqFhOeL7fNLJo49oSeMvwvb2XEfHxJ6vlmCURnW8tT5L0LU59QaAMrSfygYDhz7yjsG6QVYfxV312MsQ+ia/C5nGL07965QFDFq9iSIxD5J+K6tYBrxdR15Ri+wmBgyOAZi6lEiBsYGSqrimStYk+a6KkAmvmMvsAlVbDQAWQXFtARR6HbhCKzpratDPlko9zCicuhDcXj08F/1QcF0HFLcLkqper0JcZ8v6rI2sePtHE1vDnlnnynzMYvoeF/rR8WdJiPAkkKciy6pWeCztYjqd8DGWGLmb+H2GjHrh6hxZ7KKBOwnFi4WflwTJMt6v4hji15SS9RaWaHvUf2/t4u9cEeluq5VEcLX68Hyoeo82WfUQ2JlDFl+UEiuJgVhOm2iVSo3SAk0fxF87mW1LRmfZ246MacbKqf/RWQN9OwX4y9tqJhj9LhBszy9JI/4CTNwOexr35n+P6Tb7B2yzDiAHp4/5t6r4SWwZnu/QY2m9PmIzcZQwRjk1gJ0AQJbIj6Zg68WYleoiY2lNWGErut2jdxpbf8ec3NQ3r7NxEJxOHl"}]};
+var app=document.getElementById('app'),KIDS=[];
+function ar(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})}
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function u8(b){return Uint8Array.from(atob(b),function(c){return c.charCodeAt(0)})}
+async function dec(code,b){
+  var km=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
+  var k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:u8(b.s),iterations:200000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:u8(b.i)},k,u8(b.c))));
+}
+function login(msg){
+  document.getElementById('upd').textContent='';
+  app.innerHTML='<div class="card"><label>اكتب الكود اللي مدرّس الأولاد بعته لحضرتك</label><div class="row"><input id="cd" type="tel" inputmode="numeric" maxlength="12" placeholder="الكود" style="flex:1" onkeydown="if(event.key===\'Enter\')go()"><button class="btn" onclick="go()">دخول</button></div>'+(msg?'<div class="err">'+msg+'</div>':'')+'</div>';
+}
+async function go(){
+  var c=document.getElementById('cd').value.trim().replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)});
+  if(!c){login('اكتب الكود الأول');return}
+  app.innerHTML='<div class="card sub">ثواني...</div>';
+  for(var i=0;i<D.b.length;i++){
+    try{var f=await dec(c,D.b[i]);KIDS=f.kids;show();return}catch(e){}
+  }
+  login('الكود مش صحيح، اتأكد منه وجرب تاني');
+}
+function sq(v){var h='<span class="sq">';for(var k=1;k<=5;k++)h+='<i'+(k<=v?' class="on"':'')+'></i>';return h+'</span>'}
+function show(){
+  document.getElementById('upd').textContent='آخر تحديث: '+ar(D.u);
+  var h='';
+  KIDS.forEach(function(k){
+    h+='<div class="card"><h2>'+esc(k.n)+'</h2><div class="tag">الصف '+esc(k.g)+' · '+esc(k.s)+' · مدة الحصة '+esc(k.dur)+'</div><h3>المواعيد</h3>';
+    k.sch.forEach(function(x){h+='<div class="entry"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>'});
+    h+='<h3>الدفع</h3><div class="bar"><i style="width:'+(k.cy/8*100)+'%"></i></div><div class="tag">'+ar(k.cy)+' من ٨ حصص · كل ٨ حصص '+ar(k.price)+' جنيه</div>'+
+    '<div class="stats"><div class="stat"><b>'+ar(k.done)+'</b><span class="tag">حصص حضرها</span></div><div class="stat"><b>'+(k.avg?ar(k.avg)+' / ١٠':'-')+'</b><span class="tag">متوسط الدرجات</span></div></div>'+
+    '<h3>التقييمات</h3>';
+    if(!k.evals.length)h+='<div class="tag">هتظهر هنا تقييمات المشاركة والواجب والتركيز بعد الحصص.</div>';
+    k.evals.slice(-5).reverse().forEach(function(e){
+      h+='<div style="border-top:1px dashed var(--line);padding:8px 0"><div class="tag">'+ar(e.d)+'</div>'+
+      '<div class="entry" style="border:0;padding:2px 0"><span>المشاركة</span>'+sq(e.p)+'</div><div class="entry" style="border:0;padding:2px 0"><span>الواجب</span>'+sq(e.h)+'</div><div class="entry" style="border:0;padding:2px 0"><span>التركيز</span>'+sq(e.f)+'</div>'+(e.n?'<div class="tag">ملاحظة: '+esc(e.n)+'</div>':'')+'</div>'});
+    if(k.grades.length){h+='<h3>الدرجات</h3>';k.grades.slice(-5).reverse().forEach(function(g){h+='<div class="entry"><span>'+esc(g.sj)+' · '+ar(g.d)+'</span><b>'+ar(g.sc)+' / ١٠</b></div>'})}
+    h+='</div>';
+  });
+  h+='<div class="card"><h2>رأي حضرتك</h2><div class="tag" style="margin-bottom:8px">اكتب رأيك أو ملاحظتك وهتتفتح محادثة واتساب مع المدرّس والرسالة جاهزة.</div>';
+  if(KIDS.length>1)h+='<label>عن مين؟</label><select id="who" onchange="upd()">'+KIDS.map(function(k){return '<option>'+esc(k.n)+'</option>'}).join('')+'</select><div style="height:8px"></div>';
+  h+='<textarea id="fb" rows="4" placeholder="اكتب هنا" oninput="upd()"></textarea><div class="row" style="margin-top:10px"><a id="wa" class="btn" target="_blank" rel="noopener" href="#">ابعت على واتساب</a><button class="btn ghost" onclick="login()">خروج</button></div></div>';
+  app.innerHTML=h;upd();
+}
+function upd(){
+  var w=document.getElementById('who'),n=w?w.value:KIDS[0].n,t=document.getElementById('fb').value;
+  document.getElementById('wa').href='https://wa.me/'+D.wa+'?text='+encodeURIComponent('رأي ولي أمر '+n+':\n'+t);
+}
+login();
+</script>
+</body>
+</html>
